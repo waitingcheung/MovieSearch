@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Elastic Library</title>
+    <meta name="description" content="Movie Plot Search Engine.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.muicss.com/mui-0.9.41/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="mui-container" id="vue-instance">
+        <!-- Search Bar Header -->
+        <div class="mui-panel">
+            <div class="mui-textfield search-bar">
+                <input v-model="searchTerm" type="text" v-on:keyup="onSearchInput()">
+                <label>Search</label>
+            </div>
+        </div>
+        <!-- Search Metadata Card -->
+        <div class="mui-panel">
+            <div class="mui--text-headline">{{ numHits }} Hits</div>
+            <div class="mui--text-subhead">Displaying Results {{ searchOffset }} - {{ searchOffset + 9 }}</div>
+        </div>
+        <!-- Search Results Card List -->
+        <div class="search-results" ref="searchResults">
+            <div class="mui-panel" v-for="hit in searchResults">
+                <div class="mui--text-title"><a :href="hit._source.url" target="_blank">{{ hit._source.title }} ({{ hit._source.year }})</a></div>
+                <div class="mui--text-body1" v-html="hit.highlight.text[0]" v-on:click="showMovieModal(hit)"></div>
+                <div class="mui--text-body1" v-on:click="showMovieModal(hit)"><b>Director</b>: {{ hit._source.director }}</div>
+                <div class="mui--text-body1" v-on:click="showMovieModal(hit)"><b>Cast</b>: {{ hit._source.cast }}</div>
+            </div>
+        </div>
+        <!-- Bottom Pagination Card -->
+        <div class="mui-panel pagination-panel">
+            <button class="mui-btn mui-btn--flat mui-btn--primary" v-on:click="prevResultsPage()">Prev Page</button>
+            <button class="mui-btn mui-btn--flat mui-btn--primary" v-on:click="nextResultsPage()">Next Page</button>
+        </div>
+        <!-- Movie Paragraphs Modal Window -->
+        <div v-if="selectedParagraph" ref="movieModal" class="movie-modal">
+            <div class="paragraphs-container">
+                <!-- Movie Section Metadata -->
+                <div class="title-row">
+                    <div class="mui--text-display1 all-caps">{{ selectedParagraph._source.title }}</div>
+                    <div class="mui--text-headline">{{ selectedParagraph._source.cast }}</div>
+                </div>
+                <br>
+                <div class="mui-divider"></div>
+                <!--<div class="mui--text-subhead locations-label">Locations {{ bookOffset - 5 }} to {{ bookOffset + 5 }}</div>-->
+                <div class="mui-divider"></div>
+                <br>
+                <div class="mui--text-title"><b>Plot</b></div>
+                <!-- Movie Paragraphs -->
+                <div v-for="paragraph in paragraphs">
+                    <div class="mui--text-subhead">
+                        {{ paragraph._source.text }}
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <!-- Movie Pagination Footer -->
+            <div class="modal-footer">
+                <button class="mui-btn mui-btn--flat" v-on:click="closeMovieModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.muicss.com/mui-0.9.41/js/mui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
