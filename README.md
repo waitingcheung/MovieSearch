@@ -2,7 +2,8 @@
 
 A full-text search engine for movie plots based on Elasticsearch and Docker.
 
-![](https://user-images.githubusercontent.com/2617118/50572357-e0bcd400-0df9-11e9-9aeb-542172424f71.gif)
+![ezgif-5-158b7e3daf98](https://user-images.githubusercontent.com/2617118/50572365-50cb5a00-0dfa-11e9-951e-12a124888819.gif)
+
 
 ## Installation
 
